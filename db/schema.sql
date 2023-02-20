@@ -3,26 +3,42 @@ CREATE DATABASE management_db;
 
 USE management_db;
 
+-- Create departments table
 CREATE TABLE departments (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    department_name VARCHAR(60) NOT NULL
+  id INT NOT NULL AUTO_INCREMENT,
+  department_name VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
 );
 
+-- Create roles table
 CREATE TABLE roles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(60),
-    salary DECIMAL(10,2),
-    department_id INT,
-    FOREIGN KEY (department_id) REFERENCES departments(id)
+  id INT NOT NULL AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  salary DECIMAL(10, 2) NOT NULL,
+  department_id INT NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_department_id
+    FOREIGN KEY (department_id)
+    REFERENCES departments(id)
+    ON DELETE CASCADE
 );
 
+-- Create employees table
 CREATE TABLE employees (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(60) NOT NULL,
-    last_name VARCHAR(60) NOT NULL,
-    role_id INT,
-    manager_id INT,
-    FOREIGN KEY (role_id) REFERENCES roles(id),
-    FOREIGN KEY (manager_id) REFERENCES employees(id)
+  id INT NOT NULL AUTO_INCREMENT,
+  first_name VARCHAR(255) NOT NULL,
+  last_name VARCHAR(255) NOT NULL,
+  role_id INT NOT NULL,
+  manager_id INT,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_role_id
+    FOREIGN KEY (role_id)
+    REFERENCES roles(id)
+    ON DELETE CASCADE,
+  CONSTRAINT fk_manager_id
+    FOREIGN KEY (manager_id)
+    REFERENCES employees(id)
     ON DELETE SET NULL
 );
+
+

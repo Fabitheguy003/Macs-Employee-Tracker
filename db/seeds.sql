@@ -1,13 +1,13 @@
-INSERT INTO department (name)
-VALUES ("Information technology"),
-       ("Marketing"),
-       ("Finance"),
-       ("Sales"),
-       ("Business"),
-       ("Human Resource");
+INSERT INTO departments (department_name)
+VALUES ('Information technology'),
+       ('Marketing'),
+       ('Finance'),
+       ('Sales'),
+       ('Business'),
+       ('Human Resource');
 
 
-INSERT INTO role (title, salary, department_id) 
+INSERT INTO roles (title, salary, department_id) 
 VALUES  ('Project manager', 86333, 5),
         ('Recruiting agent', 60939 , 6),
         ('Accountant', 70000, 2),
@@ -18,7 +18,7 @@ VALUES  ('Project manager', 86333, 5),
         ('Insurance agent', 100000, 4);
         
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES  ('Fabien', 'Acina', 1, NULL),
         ('Lebron', 'James', 2, 1),
         ('Jordan', 'pool', 3, NULL),
