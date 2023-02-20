@@ -6,6 +6,7 @@ VALUES ("Information technology"),
        ("Business"),
        ("Human Resource");
 
+
 INSERT INTO role (title, salary, department_id) 
 VALUES  ('Project manager', 86333, 5),
         ('Recruiting agent', 60939 , 6),
@@ -15,6 +16,7 @@ VALUES  ('Project manager', 86333, 5),
         ('Marketer', 90000, 2),
         ('Cashier', 50000, 4),
         ('Insurance agent', 100000, 4);
+        
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES  ('Fabien', 'Acina', 1, NULL),
