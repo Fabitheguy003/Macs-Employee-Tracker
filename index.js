@@ -171,3 +171,95 @@ function addRole() {
 }
 
 
+// function to add new employees
+function addEmployee() {
+  inquirer.prompt([
+    {
+      name: 'firstName',
+      message: "Enter the employee's first name:",
+      validate: input => input.trim() !== ''
+    },
+    {
+      name: 'lastName',
+      message: "Enter the employee's last name:",
+      validate: input => input.trim() !== ''
+    },
+    {
+      name: 'roleId',
+      message: "Enter the employee's role ID:",
+      validate: input => Number.isInteger(Number(input))
+    },
+    {
+      name: 'managerId',
+      message: "Enter the employee's manager ID:",
+      validate: input => Number.isInteger(Number(input))
+    }
+  ]).then(answer => {
+    db.query('INSERT INTO employees SET ?', {
+      first_name: answer.firstName,
+      last_name: answer.lastName,
+      role_id: answer.roleId,
+      manager_id: answer.managerId
+    }, (err) => {
+      if (err) throw err;
+      console.log(`\nSuccessfully added ${answer.firstName} ${answer.lastName} to the database.\n`);
+      displayMenu();
+    });
+  });
+}
+
+// function to update rmployees
+function updateEmployee() {
+  let employees = [];
+  let roles = [];
+
+  // get all employees
+  db.query('SELECT * FROM employees', (err, results) => {
+    if (err) throw err;
+    employees = results;
+
+    // get all roles
+    db.query('SELECT * FROM roles', (err, results) => {
+      if (err) throw err;
+      roles = results;
+
+      inquirer.prompt([
+        {
+          type: 'list',
+          name: 'employeeId',
+          message: 'Which employee would you like to update?',
+          choices: employees.map((employee) => {
+            return {
+              name: `${employee.first_name} ${employee.last_name}`,
+              value: employee.id
+            };
+          })
+        },
+        {
+          type: 'list',
+          name: 'roleId',
+          message: 'What is the employee\'s new role?',
+          choices: roles.map((role) => {
+            return {
+              name: role.title,
+              value: role.id
+            };
+          })
+        }
+      ]).then((answers) => {
+        // update the employee's role in the database
+        db.query(
+          'UPDATE employees SET role_id = ? WHERE id = ?',
+          [answers.roleId, answers.employeeId],
+          (err) => {
+            if (err) throw err;
+            console.log('Employee role updated successfully!');
+            displayMenu();
+          }
+        );
+      });
+    });
+  });
+}
+
+
