@@ -138,6 +138,36 @@ function addDepartment() {
 }
 
 
-
+// function to add new roles
+function addRole() {
+  inquirer.prompt([
+    {
+      type: 'input',
+      name: 'title',
+      message: 'Enter role title:'
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'Enter role salary:'
+    },
+    {
+      type: 'input',
+      name: 'department_id',
+      message: 'Enter department id:'
+    }
+  ]).then((response) => {
+    const { title, salary, department_id } = response;
+    db.query(
+      `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`,
+      [title, salary, department_id],
+      (err) => {
+        if (err) throw err;
+        console.log('Role added successfully!');
+        displayMenu();
+      }
+    );
+  });
+}
 
 
