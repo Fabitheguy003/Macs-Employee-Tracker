@@ -262,4 +262,82 @@ function updateEmployee() {
   });
 }
 
+// function to delete departments
+function deleteDepartment() {
+  db.query('SELECT * FROM departments', (err, results) => {
+  if (err) throw err;
 
+  const departmentChoices = results.map(({ id, name }) => ({
+    value: id,
+    name: name
+  }));
+  
+  inquirer.prompt([
+    {
+      type: 'list',
+      name: 'department',
+      message: 'Which department would you like to delete?',
+      choices: departmentChoices
+    }
+  ]).then(answer => {
+    const { department } = answer;
+    db.query('DELETE FROM departments WHERE id = ?', department, (err) => {
+      if (err) throw err;
+      console.log(`Successfully deleted department with ID ${department}!`);
+      displayMenu();
+    });
+  });
+  });
+  }
+
+// function to delete roles
+function deleteRole() {
+  // prompt the user to choose a role to delete
+  inquirer.prompt([
+    {
+      name: 'role',
+      type: 'input',
+      message: 'Enter the title of the role you want to delete:'
+    }
+  ]).then((answers) => {
+    // execute a DELETE query to remove the role from the database
+    db.query(
+      'DELETE FROM roles WHERE title = ?',
+      [answers.role],
+      (err) => {
+        if (err) throw err;
+        console.log(' role deleted!\n');
+      }
+    );
+  });
+}
+
+// function to delete employees
+function deleteEmployee() {
+  // get all employees
+  db.query('SELECT * FROM employees', (err, results) => {
+    if (err) throw err;
+
+    // prompt user to select an employee to delete
+    inquirer.prompt([
+      {
+        type: 'list',
+        name: 'employee',
+        message: 'Select an employee to delete:',
+        choices: results.map((employee) => {
+          return {
+            name: `${employee.first_name} ${employee.last_name}`,
+            value: employee.id,
+          };
+        }),
+      },
+    ]).then((answer) => {
+      // execute SQL DELETE statement to remove employee from database
+      db.query('DELETE FROM employees WHERE id = ?', [answer.employee], (err) => {
+        if (err) throw err;
+        console.log('Employee deleted successfully!');
+        displayMenu();
+      });
+    });
+  });
+}
